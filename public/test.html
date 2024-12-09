@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cost Estimation Test</title>
+</head>
+<body>
+    <h1>Cost Estimation Test</h1>
+    <form id="estimateForm">
+        <label for="area">Area (sq. ft.):</label><br>
+        <input type="number" id="area" name="area" required><br><br>
+        <label for="budget">Budget:</label><br>
+        <select id="budget" name="budget">
+            <option value="economical">Economical</option>
+            <option value="moderate">Moderate</option>
+            <option value="luxurious">Luxurious</option>
+        </select><br><br>
+        <button type="submit">Submit</button>
+    </form>
+    <div id="result"></div>
+    <script>
+        document.getElementById('estimateForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const area = document.getElementById('area').value;
+            const budget = document.getElementById('budget').value;
+
+            try {
+                const response = await fetch('/estimate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ area: parseFloat(area), budget })
+                });
+
+                const result = await response.json();
+                document.getElementById('result').innerText = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('result').innerText = `Error: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
